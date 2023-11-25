@@ -1,23 +1,23 @@
 package frontend;
 
-import Modules.Customer;
+import Modules.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CWindow extends JFrame {
+public class WWindow extends JFrame {
 	private JLabel welcomeLabel;
-	private Customer c;
+	private Worker w;
 	private JPanel centerPanel;
     private JButton ub;
 	private static final long serialVersionUID = 1L;
 
     
     
-    public CWindow(Customer customer) {
-    	c=customer;
+    public WWindow(Worker ww) {
+    	w=ww;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(200, 200, 800, 600);
 
@@ -36,17 +36,19 @@ public class CWindow extends JFrame {
         // Left Panel for Buttons
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(new Color(40, 150, 191));
-        leftPanel.setLayout(new GridLayout(4, 1, 10, 10));
+        leftPanel.setLayout(new GridLayout(5, 1, 10, 10));
         leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JButton bSearch = createButton("Search");
+        JButton bWallet = createButton("Wallet");
         JButton bAppointment = createButton("Appointment");
         JButton bHome = createButton("Home");
         JButton bExit = createButton("Exit");
+        JButton bReview = createButton("Reviews");
 
         leftPanel.add(bHome);
-        leftPanel.add(bSearch);
         leftPanel.add(bAppointment);
+        leftPanel.add(bReview);
+        leftPanel.add(bWallet);
         leftPanel.add(bExit);
 
         getContentPane().add(leftPanel, BorderLayout.WEST);
@@ -81,13 +83,22 @@ public class CWindow extends JFrame {
         cl.setFont(new Font("Arial Black", Font.BOLD, 14));
         cl.setBounds(82, 185, 218, 45);
         centerPanel.add(cl);
+
+        JLabel sl = new JLabel("Skill: ");
+        sl.setFont(new Font("Arial Black", Font.BOLD, 14));
+        sl.setBounds(382, 191, 218, 45);
+        centerPanel.add(sl);
+        
+        JLabel fl = new JLabel("Fee: ");
+        fl.setFont(new Font("Arial Black", Font.BOLD, 14));
+        fl.setBounds(233, 241, 218, 45);
+        centerPanel.add(fl);
         
         ub = new JButton("UPDATE");
         ub.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        	CInfo cv=new CInfo(c);
-        	cv.setVisible(true);
-        	HomeButton(c);
+        		CInfo ww=new CInfo(w);
+        		ww.setVisible(true);
         	}
         });
         
@@ -96,20 +107,23 @@ public class CWindow extends JFrame {
         ub.setFont(new Font("Arial Black", Font.BOLD, 14));
         ub.setBounds(260, 323, 161, 37);
         centerPanel.add(ub);
+        
 
-        if(c!=null) {
-        	nl.setText("Name: " + c.getName());
-        	pl.setText("Phone No: " + c.getPhone());
-        	gl.setText("Gender: " + c.getGender());
-        	cl.setText("City: " + c.getCity());
-        	dl.setText("DOB: " + c.getDob());
+        if(w!=null) {
+        	nl.setText("Name: " + w.getName());
+        	pl.setText("Phone No: " + w.getPhone());
+        	gl.setText("Gender: " + w.getGender());
+        	cl.setText("City: "+w.getCity());
+        	dl.setText("DOB: " + w.getDob());
+        	sl.setText("Skill: "+w.getSkill());
+        	fl.setText("Fee: " + String.valueOf(w.getFee()));
         }
         
         
         setVisible(true);
     }
 
-    private void HomeButton(Customer customer) {
+    private void HomeButton(Worker w) {
     	
     	getContentPane().remove(centerPanel); 
     	centerPanel = new JPanel();
@@ -143,14 +157,28 @@ public class CWindow extends JFrame {
         cl.setBounds(82, 185, 218, 45);
         centerPanel.add(cl);
         
+        JLabel sl = new JLabel("Skill: ");
+        sl.setFont(new Font("Arial Black", Font.BOLD, 14));
+        sl.setBounds(382, 191, 218, 45);
+        centerPanel.add(sl);
+        
+        JLabel fl = new JLabel("Fee: ");
+        fl.setFont(new Font("Arial Black", Font.BOLD, 14));
+        fl.setBounds(233, 241, 218, 45);
+        centerPanel.add(fl);
+        
+        
+        
         centerPanel.add(ub);
 
-        if(c!=null) {
-        	nl.setText("Name: " + c.getName());
-        	pl.setText("Phone No: " + c.getPhone());
-        	gl.setText("Gender: " + c.getGender());
-        	cl.setText("City: " + c.getCity());
-        	dl.setText("DOB: " + c.getDob());
+        if(w!=null) {
+        	nl.setText("Name: " + w.getName());
+        	pl.setText("Phone No: " + w.getPhone());
+        	gl.setText("Gender: " + w.getGender());
+        	cl.setText("City: " + w.getCity());
+        	dl.setText("DOB: " + w.getDob());
+        	sl.setText("Skill: "+w.getSkill());
+        	fl.setText("Fee: " + String.valueOf(w.getFee()));
         }
         
         getContentPane().add(centerPanel, BorderLayout.CENTER);
@@ -173,34 +201,49 @@ public class CWindow extends JFrame {
                 	lg.setVisible(true);
                 	dispose();
                 }
-                if (buttonText.equals("Search")) {
-                	   	welcomeLabel.setText("S  E  A  R  C  H");
-                		getContentPane().remove(centerPanel); 
+                if (buttonText.equals("Wallet")) {
+                	   	welcomeLabel.setText("W  A  L  L  E  T");
+                	   	getContentPane().remove(centerPanel); 
                 	    
-                	    centerPanel = new CSearch(c);
+                	    centerPanel = new WWallet(w);
+                	 
                 	    centerPanel.setVisible(true);
-                	    
                 	    getContentPane().add(centerPanel, BorderLayout.CENTER);
                 	    
                 	    getContentPane().revalidate();
                 	    getContentPane().repaint();
+                    	
                 }
                 if (buttonText.equals("Home")) {
                    	welcomeLabel.setText("F  I  X  I  T");
-                	HomeButton(c);
+                	HomeButton(w);
                 }
-                if (buttonText.equals("Appointment")) {
-                   	welcomeLabel.setText("A P P O I N T M E N T");
-                	getContentPane().remove(centerPanel); 
+                if (buttonText.equals("Reviews")) {
+                   	welcomeLabel.setText("R  E  V  I  E  W");
+                   	getContentPane().remove(centerPanel); 
             	    
-            	    centerPanel = new CAppointment(c);
+            	    centerPanel = new WReview(w);
             	 
             	    centerPanel.setVisible(true);
             	    getContentPane().add(centerPanel, BorderLayout.CENTER);
             	    
             	    getContentPane().revalidate();
             	    getContentPane().repaint();
-            }
+                	
+                }
+                if (buttonText.equals("Appointment")) {
+                   	welcomeLabel.setText("A P P O I N T M E N T");
+                   	getContentPane().remove(centerPanel); 
+            	    
+            	    centerPanel = new WAppointment(w);
+            	 
+            	    centerPanel.setVisible(true);
+            	    getContentPane().add(centerPanel, BorderLayout.CENTER);
+            	    
+            	    getContentPane().revalidate();
+            	    getContentPane().repaint();
+            
+                }
             }
         });
         return button;
@@ -210,14 +253,13 @@ public class CWindow extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Customer customer = new Customer();
-            customer.setName("");
-            customer.setPhone("");
-            customer.setCity("");
-            customer.setGender("");
-            customer.setDob("");
-
-            CWindow cWindow = new CWindow(customer);
+            Worker w = new Worker();
+            w.setName("");
+            w.setPhone("");
+            w.setCity("");
+            w.setGender("");
+            w.setDob("");
+            WWindow ww=new WWindow(w);
         });
     }
 }

@@ -20,6 +20,7 @@ import java.util.Date;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 public class CReview extends JFrame {
+	
 	private Service s;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -188,7 +189,6 @@ public class CReview extends JFrame {
 		            else {
 			            String comments = comm.getText();
 			            Review r=new Review();
-			            s.updateStatus(s.getId(), "Completed");
 			            r.setcId(s.getCid());
 			            r.setwId(s.getWid());
 			            r.setRating(rating);
@@ -197,9 +197,7 @@ public class CReview extends JFrame {
 			            String date=String.valueOf(currentDate.getYear())+"-" + String.valueOf(currentDate.getMonthValue())+ "-"+ String.valueOf(currentDate.getDayOfMonth());
 			            r.setDate(date);
 			            r.post();
-			            CCancel cv=new CCancel();
-			            cv.Assign(4,4);
-			            cv.setVisible(true);
+			            s.updateStatus(s.getId(), "Completed");
 			            dispose();
 		            }
 				}

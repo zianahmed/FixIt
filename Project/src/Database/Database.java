@@ -4,10 +4,7 @@ import java.sql.*;
 import Modules.*;
 import java.util.*;
 public class Database {
-	String url = "jdbc:mysql://localhost:3306/sda";
-	String user = "root";
-	String password = "123456";
-   
+	
   public int register(Customer c) {
     	int generatedId=-1;
         String insertQuery = "INSERT INTO Customer (name, phoneNo, pass, city, gender, dob) VALUES (?, ?, ?, ?, ?, ?)";
@@ -17,7 +14,6 @@ public class Database {
 
             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)
         ) {
-            // Set values for the prepared statement
             preparedStatement.setString(1, c.getName());
             preparedStatement.setString(2, c.getPhone());
             preparedStatement.setString(3, c.getPassword());
@@ -54,7 +50,6 @@ public class Database {
             e.printStackTrace();
         }
 
-        // Return the generated ID
         return generatedId;
     }
   public void insertService(Service service) {
@@ -96,6 +91,7 @@ public class Database {
                   w.setDob(resultSet.getString("dob"));
                   w.setSkill(resultSet.getString("skill"));
                   w.setFee(resultSet.getDouble("fee"));
+                  w.setRating(resultSet.getDouble("rating"));
               }
           }
       } catch (SQLException e) {
@@ -128,6 +124,74 @@ public class Database {
 
       return c;
   }
+  
+  public Customer update(Customer c) {
+	  
+	  String updateQuery = "UPDATE Customer SET name=?, phoneNo=?, city=?, pass=? WHERE id=?";
+
+	    try (
+	        Connection connection = DriverManager.getConnection(url, user, password);
+	        PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)
+	    ) {
+	        preparedStatement.setString(1, c.getName());
+	        preparedStatement.setString(2, c.getPhone());
+	        preparedStatement.setString(3, c.getCity());
+	        preparedStatement.setString(4, c.getPassword());
+	        preparedStatement.setInt(5, c.getId());
+
+	        int rowsAffected = preparedStatement.executeUpdate();
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }	  
+	  return c;
+  }
+  public Worker update(Worker w){
+	  
+	  String updateQuery = "UPDATE Worker SET name=?, phoneNo=?, city=?, pass=?,skill=?,fee=? WHERE id=?";
+
+	    try (
+	        Connection connection = DriverManager.getConnection(url, user, password);
+	        PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)
+	    ) {
+	        preparedStatement.setString(1, w.getName());
+	        preparedStatement.setString(2, w.getPhone());
+	        preparedStatement.setString(3, w.getCity());
+	        preparedStatement.setString(4, w.getPassword());
+	        preparedStatement.setString(5, w.getSkill());
+	        preparedStatement.setDouble(6, w.getFee());
+	        preparedStatement.setInt(7, w.getId());
+
+	        int rowsAffected = preparedStatement.executeUpdate();
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }	  
+	  return w;
+  }
+
+  public double getWBal(int wid) {
+	  String selectQuery = "SELECT Amount FROM wAccount WHERE wid = ?";
+      double bal=0;
+	  try (
+          Connection connection = DriverManager.getConnection(url, user, password);
+          PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)
+      ) {
+          preparedStatement.setInt(1, wid);
+
+          try (ResultSet resultSet = preparedStatement.executeQuery()) {
+              if (resultSet.next()) {
+                  bal= resultSet.getDouble("Amount");
+              }
+          }
+      } 
+	  
+	  catch (SQLException e) {
+          e.printStackTrace();
+      }
+      return bal;
+  
+  };
   
   public ArrayList<Worker> getWorker(String skill, String city) {
       ArrayList<Worker> workers = new ArrayList<>();
@@ -192,7 +256,7 @@ public class Database {
 
       return reviews;
   }
-  public ArrayList<Service> getService(int cid, String status) {
+  public ArrayList<Service> getCService(int cid, String status) {
 	    ArrayList<Service> services = new ArrayList<>();
 
 	    String selectQuery = "SELECT w.id as 'wid',s.sid as 's',w.skill as 'type',w.city as 'city', c.name as 'customer', w.name as 'worker', s.date as 'date', w.phoneNo as 'wphone', s.addr as 'address', s.details as 'detail', s.fee as 'fee' " +
@@ -245,7 +309,60 @@ public class Database {
 
 	    return services;
 	}
-  
+  public ArrayList<Service> getWService(int wid, String status) {
+	    ArrayList<Service> services = new ArrayList<>();
+
+	    String selectQuery = "SELECT c.id as 'cid',s.sid as 's',w.skill as 'type',w.city as 'city', c.name as 'customer', w.name as 'worker', s.date as 'date', c.phoneNo as 'cphone', s.addr as 'address', s.details as 'detail', s.fee as 'fee' " +
+	            "FROM Service s " +
+	            "INNER JOIN Worker w ON s.wid = w.id " +
+	            "INNER JOIN Customer c ON c.id = s.cid " +
+	            "WHERE s.wid = ? AND s.status = ?";
+
+	    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+	            preparedStatement.setInt(1, wid);
+	            preparedStatement.setString(2, status);
+
+	            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	                while (resultSet.next()) {  
+	                    int serviceId = resultSet.getInt("s");
+	                    int cId = resultSet.getInt("cid");
+	                    String customerName = resultSet.getString("customer");
+	                    String workerName = resultSet.getString("worker");
+	                    String date = resultSet.getString("date");
+	                    String cPhone = resultSet.getString("cphone");
+	                    String address = resultSet.getString("address");
+	                    String detail = resultSet.getString("detail");
+	                    String city = resultSet.getString("city");
+	                    double fee = resultSet.getDouble("fee");
+	                    String type=resultSet.getString("type");
+	                    
+	                    Service service = new Service();
+	                    service.setType(type);
+	                    service.setId(serviceId);
+	                    service.setCid(cId);
+	                    service.setDate(date);
+	                    service.setAddr(address);
+	                    service.setStatus(status);
+	                    service.setDetail(detail);
+	                    service.setcName(customerName);
+	                    service.setwName(workerName);
+	                    service.setcPhone(cPhone);
+	                    service.setCity(city);
+	                    service.setFee(fee);
+	                    service.setWid(wid);
+	                    	
+	                    services.add(service);
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return services;
+	}
+
   public void removeService(int i) {
 	    String deleteQuery = "DELETE FROM Service WHERE sid = ?";
 	    
@@ -277,6 +394,25 @@ public class Database {
 	        e.printStackTrace();
 	    }
 	}
+  public void newPayment(Service s,double total) {
+      String insertQuery = "INSERT INTO Payment (sid, cid, wid, amount,date) VALUES (?,?,?,?,CURDATE())";
+
+      try (
+          Connection connection = DriverManager.getConnection(url, user, password);
+
+          PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)
+      ) {
+          preparedStatement.setInt(1, s.getId());
+          preparedStatement.setInt(2, s.getCid());
+          preparedStatement.setInt(3, s.getWid());
+          preparedStatement.setDouble(4, total);;
+          preparedStatement.executeUpdate();
+
+      } catch (SQLException e) {
+          e.printStackTrace();
+      }
+  
+  }
   
   public void postReview(Review r) {
       String insertQuery = "INSERT INTO Review (wid, cid, date, Rating, review) VALUES (?, ?, ?, ?, ?)";
@@ -296,4 +432,84 @@ public class Database {
           e.printStackTrace();
       }
   }
+  
+
+	String url = "jdbc:mysql://localhost:3306/sda";
+	String user = "root";
+	String password = "123456";
+ 
+
+  public void withdraw(Withdraw withdrawal) {
+      Connection connection = null;
+
+      try {
+          connection = DriverManager.getConnection(url, user, password);
+
+          String insertQuery = "INSERT INTO withdraw (wid, amount, accTitle, accNum, bank, date) VALUES (?, ?, ?, ?, ?, CURDATE())";
+
+          try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+              preparedStatement.setInt(1, withdrawal.getWid());
+              preparedStatement.setDouble(2, withdrawal.getAmount());
+              preparedStatement.setString(3, withdrawal.getAccTitle());
+              preparedStatement.setString(4, withdrawal.getAccNum());
+              preparedStatement.setString(5, withdrawal.getBank());
+
+              // Executing the query
+              preparedStatement.executeUpdate();
+          }
+      } catch (SQLException e) {
+          e.printStackTrace();
+      } finally {
+          // Closing the connection
+          if (connection != null) {
+              try {
+                  connection.close();
+              } catch (SQLException e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+  }
+
+  public ArrayList<Withdraw> wHistory(int wid) {
+      ArrayList<Withdraw> withdrawalList = new ArrayList<>();
+      Connection connection = null;
+
+      try {
+          connection = DriverManager.getConnection(url, user, password);
+
+          String selectQuery = "SELECT * FROM withdraw WHERE wid = ?";
+
+          try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+              preparedStatement.setInt(1, wid);
+
+              try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                  while (resultSet.next()) {
+                      int withdrawalId = resultSet.getInt("wid");
+                      double withdrawalAmount = resultSet.getDouble("amount");
+                      String accTitle = resultSet.getString("accTitle");
+                      String accNum = resultSet.getString("accNum");
+                      String bank = resultSet.getString("bank");
+                      String date = resultSet.getString("date");
+
+                      Withdraw withdrawal = new Withdraw(withdrawalId, withdrawalAmount, accTitle, accNum, bank, date);
+                      withdrawalList.add(withdrawal);
+                  }
+              }
+          }
+      } catch (SQLException e) {
+          e.printStackTrace();
+      } finally {
+          if (connection != null) {
+              try {
+                  connection.close();
+              } catch (SQLException e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+
+      return withdrawalList;
+  }
+
 }

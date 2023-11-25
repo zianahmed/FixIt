@@ -51,6 +51,33 @@ public class CDetails extends JFrame {
 
 	}
 	
+	void Assign(Service s,int i) {
+		
+		this.s=s;
+
+		if(s!=null) {
+			
+			if(i==1) {
+				worker.setText("Customer: " +s.getcName());
+				phone.setText("Phone: "  +s.getcPhone());
+			}
+			else {
+				worker.setText("Worker: " +s.getwName());
+				phone.setText("Phone: "  +s.getwPhone());
+			}
+			sid.setText("Service ID: " + String.valueOf(s.getId()));
+			type.setText("Type: " +s.getType());
+			date.setText("Date" +s.getDate());
+			fee.setText("Fee: " + String.valueOf(s.getFee()));
+			status.setText("Status" +s.getStatus());
+			city.setText("City: " + s.getCity());
+			addr.setText("Address: "  + s.getAddr());
+			details.setText("Details: " + s.getDetail());
+		}
+
+	}
+
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -71,6 +98,7 @@ public class CDetails extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 451, 495);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);

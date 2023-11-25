@@ -27,6 +27,16 @@ public class Worker extends User {
         this.gender = gender;
     }
     
+    public void update() {
+    	Database db=new Database();
+    	db.update(this);
+    }
+    
+    public double getBal() {
+    	Database db=new Database();
+    	return db.getWBal(id);
+    }
+    
     public double getFee() {
         return fee;
     }

@@ -42,12 +42,23 @@ public class Service {
     	db.insertService(this);
     }
     
+    public void Pay(double total) {
+    	Database db=new Database();
+    	db.newPayment(this, total);
+    	this.updateStatus(id, "Review");
+    }
     
     public ArrayList<Service> cService(int cid,String status){
     	Database db=new Database();
-    	ArrayList<Service> s=db.getService(cid, status);
+    	ArrayList<Service> s=db.getCService(cid, status);
     	return s;
     }
+    
+    public ArrayList<Service> wService(int wid,String status){
+    	Database db=new Database();
+    	return db.getWService(wid, status);
+    }
+    
     
     public void Remove(int i) {
     	Database db=new Database();

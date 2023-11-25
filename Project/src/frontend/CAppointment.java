@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 public class CAppointment extends JPanel {
 	private Customer c;
 	private Service sw;
-	ArrayList<Service> services;
+	ArrayList<Service> services=new ArrayList<Service>();
 	private JTable sTable;
 	private DefaultTableModel model;
 	
@@ -32,7 +32,7 @@ public class CAppointment extends JPanel {
 		this.c=c;
 		this.sw = new Service();
 		setLayout(null);
-		
+		this.setBackground(Color.WHITE);
 		
 	    model = new DefaultTableModel();
         model.addColumn("Worker Name");
@@ -43,6 +43,7 @@ public class CAppointment extends JPanel {
         JPanel ptable = new JPanel();
 		ptable.setBounds(10, 70, 590, 287);
 		ptable.setVisible(true);
+		ptable.setBackground(Color.WHITE);
 		add(ptable);
 		
 		sTable = new JTable(model);
@@ -56,10 +57,6 @@ public class CAppointment extends JPanel {
         
         sTable.setModel(model);
         addTableMouseListener();
-
-        sTable.setModel(model);
-        addTableMouseListener();
-
         JScrollPane scrollPane = new JScrollPane(sTable); 
         scrollPane.setBounds(0, 0, 590, 287); 
         ptable.add(scrollPane);
@@ -113,10 +110,13 @@ public class CAppointment extends JPanel {
 					}
 					
 					else if("COMPLETE"==action.getText()) {
-						CCancel cv=new CCancel();
 						sw.updateStatus(sw.getId(),"Payment");
-						cv.Assign(sw.getId(),2);
-						cv.setVisible(true);
+					}
+					
+					else if("PAY"==action.getText()) {
+						CPayment cr=new CPayment();
+						cr.Assign(sw,c);
+						cr.setVisible(true);
 					}
 					
 					else if("REVIEW"==action.getText()) {
@@ -131,7 +131,7 @@ public class CAppointment extends JPanel {
 						services=sw.cService(cid, s);
 			            model.setRowCount(0);
 			            for (Service service : services) {
-	                        model.addRow(new Object[]{service.getwName(),service.getType(),service.getDate(),service.getDate(),service.getFee()});
+	                        model.addRow(new Object[]{service.getwName(),service.getType(),service.getDate(),service.getFee()});
 	                    }
 	                    
 	                    sTable.setModel(model);
@@ -161,7 +161,7 @@ public class CAppointment extends JPanel {
 						services=sw.cService(cid, s);
 			            model.setRowCount(0);
 			            for (Service service : services) {
-	                        model.addRow(new Object[]{service.getwName(),service.getType(),service.getDate(),service.getDate(),service.getFee()});
+	                        model.addRow(new Object[]{service.getwName(),service.getType(),service.getDate(),service.getFee()});
 	                    }
 	                    
 	                    sTable.setModel(model);
@@ -202,18 +202,19 @@ public class CAppointment extends JPanel {
 				}
 			}
 		});
-	}
-		private void addTableMouseListener() {
-	        sTable.addMouseListener(new MouseAdapter() {
-	            @Override
-	            public void mouseClicked(MouseEvent e) {
-	                int selectedRow = sTable.getSelectedRow();
-	                if (selectedRow != -1) {
-	                	sw=services.get(sTable.getSelectedRow());
-	                }
-	            }
-	        });
-
 		
+	}
+
+
+	private void addTableMouseListener() {
+		sTable.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+		        int selectedRow = sTable.getSelectedRow();
+		        if (selectedRow != -1 && selectedRow < services.size()) {
+		            sw = services.get(selectedRow);  
+		        }
+		    }
+		});
 	}
 }

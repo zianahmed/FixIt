@@ -35,19 +35,7 @@ public class CCancel extends JFrame {
 		right.setText("Cancel");
 		}
 		
-		if (use==2) {
-			main.setText("Marked as Completed");
-			left.setText("Payment");
-			right.setText("Pay Later");				
-		}
-		
-		if(use==3) {
-			main.setText("Payment Completed");
-			left.setText("ADD Review");
-			right.setText("Later");					
-		}
-		
-		if(use==4) {
+		if(use==1) {
 			main.setText("Thankyou for using FIXIT");
 			left.setText("OK");
 			right.setEnabled(false);					

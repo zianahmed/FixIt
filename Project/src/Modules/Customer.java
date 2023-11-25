@@ -28,7 +28,13 @@ public class Customer extends User {
 		Database db= new Database();
 		this.setId(db.register(this));
 	};
-
+	
+	
+	public void update() {
+		Database db= new Database();
+		db.update(this);	
+	}
+	
 	public void Login(){
 		Database db= new Database();
 		Customer c= db.login(this);

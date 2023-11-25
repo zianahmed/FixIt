@@ -56,6 +56,7 @@ public class CView extends JFrame {
 		contentPane.setLayout(null);
 		
 		ptable = new JPanel();
+		ptable.setBackground(new Color(255, 255, 255));
 		ptable.setBounds(10, 144, 536, 303);
 		contentPane.add(ptable);
 		if (w!=null) {

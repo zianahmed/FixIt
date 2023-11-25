@@ -30,6 +30,7 @@ public class CSearch extends JPanel {
 	private JButton bReview;
 	
 	ArrayList<Worker> workers;
+	
 	private JTable workerTable;
 	private DefaultTableModel model;
 	
@@ -38,7 +39,8 @@ public class CSearch extends JPanel {
 	public CSearch(Customer c) {
 		this.c=c;
 		setLayout(null);
-	
+		this.setBackground(Color.WHITE);
+			
 		
 		
 		    model = new DefaultTableModel();

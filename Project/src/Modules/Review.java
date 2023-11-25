@@ -1,7 +1,7 @@
 package Modules;
 
 import Database.Database;
-
+import java.util.*;
 public class Review {
     private int cId;
     private String cName;
@@ -19,6 +19,13 @@ public class Review {
     	Database db=new Database();
     	db.postReview(this);
     } 
+    
+    public ArrayList<Review> getReviews(int wid){
+    	Database db=new Database();
+    	return db.getReview(wid);
+    }
+    
+    
     public Review(int cId, String cName, int wId, int rating, String wName, String date, String comment) {
     	this.cId = cId;
         this.cName = cName;

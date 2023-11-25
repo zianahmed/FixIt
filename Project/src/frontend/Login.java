@@ -106,6 +106,9 @@ public class Login extends JFrame {
                         return;
                     }
                     error.setForeground(Color.WHITE);
+                    WWindow ww= new WWindow(w);
+                    ww.setVisible(true);
+                    dispose();
                 } else if ("Customer".equals(accType)) {
                     Customer c = new Customer();
                     c.setPhone(phone);
