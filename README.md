@@ -8,7 +8,7 @@ Certainly! Here is an updated version of the README file with a link to the docu
 
 This desktop application is designed to streamline the process of hiring workers. Built using Java, it adheres to software development methodologies to ensure robust performance, security, and user satisfaction. The application allows employers to post job listings, review applications, and manage hires, while workers can search for job postings, apply, and track their application status.
 
-For a detailed report on the project, including diagrams, design details, and implementation specifics, please refer to the [project report](path_to_your_uploaded_report.pdf).
+For a detailed report on the project, including diagrams, design details, and implementation specifics, please refer to the [project report](Project_Report.pdf).
 
 ## Features
 
