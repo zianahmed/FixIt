@@ -76,7 +76,3 @@ For any issues, feature requests, or general feedback, please contact our suppor
 ---
 
 This README provides a comprehensive guide to the Worker Hiring Desktop Application, ensuring users can effectively utilize its features while adhering to best practices in software development.
-
----
-
-Please replace `path_to_your_uploaded_report.pdf` with the actual URL or file path where the report is hosted. If you need the specific path or URL for the uploaded report, let me know, and I can assist further.
